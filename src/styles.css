@@ -196,7 +196,7 @@
 
     .reference-actions {
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
+      grid-template-columns:repeat(3,minmax(0,1fr));
       gap:12px;
       margin:2px 0 22px;
     }
@@ -844,6 +844,9 @@
     .reference-modal-head h2 { margin:0 0 5px; font-size:25px; letter-spacing:-.03em; }
     .reference-modal-head p { margin:0; color:var(--muted); font-size:13px; }
     .reference-modal-body { padding:20px 24px 24px; }
+    .reference-stage-list { display:grid; gap:10px; }
+    .reference-stage-list h3 { margin:10px 0 4px; }
+    .reference-stage-list p { margin:0 0 10px; color:var(--muted); font-size:12px; }
 
     .modal-focus {
       display:grid;
@@ -1015,6 +1018,28 @@
       font-weight:750;
     }
 
+    .day-groups { display:flex; align-items:center; gap:8px; color:#c9bcff; font-size:12px; font-weight:800; }
+
+    .muscle-switcher {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .muscle-switcher button { min-height:64px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; text-align:left; }
+    .muscle-switcher button span { color:var(--muted); font-size:10px; font-weight:600; }
+    .muscle-switcher button strong { margin-top:2px; font-size:15px; }
+    .muscle-switcher button.active { border-color:rgba(124,92,255,.5); background:var(--accent-soft); }
+
+    .secondary-context { margin-bottom:16px; padding:14px 16px; border-left:3px solid var(--blue); }
+    .secondary-context strong { display:block; margin-bottom:3px; }
+    .secondary-context p { margin:0; color:var(--muted); font-size:12px; }
+    .empty-stage { padding:18px; color:var(--muted); font-size:13px; }
+    .workout-group-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; }
+    .workout-group-head button { min-height:28px; padding:0 7px; font-size:10px; }
+    .universal-characteristics { display:grid; margin:0 0 20px; }
+
     @media (max-width:1050px) {
       .exercise-catalog-layout { grid-template-columns:1fr; }
       .current-workout { position:static; }
@@ -1044,6 +1069,7 @@
     @media (max-width:640px) {
       .chest-shell { padding-bottom:100px; }
       .reference-actions { grid-template-columns:1fr; }
+      .muscle-switcher { grid-template-columns:1fr 1fr; }
       .exercise-section-title { align-items:flex-start; flex-direction:column; gap:4px; }
       .reference-modal-head { padding:20px 56px 15px 18px; }
       .reference-modal-body { padding:16px 18px 18px; }
