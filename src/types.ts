@@ -57,7 +57,7 @@ export type RecommendationStatus = 'recommended' | 'suitable' | 'not_ideal';
 export interface ExerciseRecommendation {
   exerciseId: string;
   status: RecommendationStatus;
-  reasons: string[];
+  reasons: Array<{id:string;text:string;tone:'positive'|'neutral'|'negative';ruleId:string}>;
   score: number;
 }
 

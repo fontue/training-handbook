@@ -14,6 +14,8 @@ export type EvidenceBasis = 'systematic_review' | 'longitudinal_training_study' 
 
 export interface ContentEvidence { confidence: EvidenceConfidence; basis: EvidenceBasis[]; sourceIds: string[]; note?: string }
 export interface EvidenceBackedText { text: string; evidence: ContentEvidence }
+export interface ExerciseClaim { id:string; text:string; evidence:ContentEvidence }
+export interface ExerciseSensations { target:string[]; acceptable:string[]; warning:string[] }
 export interface FocusMetric { id: string; label: string; value: number }
 export interface ExerciseFocus { label: string; metrics: FocusMetric[]; disclaimer: string; evidence: ContentEvidence }
 export interface PracticalProperties { equipment: EquipmentType; requiresSpotter: boolean; lowerBackDemand: LoadLevel; elbowDemand: LoadLevel; shoulderDemand: LoadLevel; stabilityDemand: LoadLevel; systemicFatigue: LoadLevel; unilateral: boolean }
@@ -25,11 +27,14 @@ export interface WorkoutExercise {
   reps: string; sets: string; rir: string; rest: string; role: ProgramRole; stimulusTags: StimulusTag[]; programPurpose: string;
   weightGuidance: string; tip: string; progression: string; progressionMethod: ProgressionMethod; choose: string[]; avoid: string[]; mistakes: string[]; howto: string[];
   focus: ExerciseFocus; participation: MuscleParticipation; practicalProperties: PracticalProperties; profile: ExerciseProfile;
-  expectedSecondaryExposure: Partial<Record<LoadTargetId, number>>; evidence: ContentEvidence;
+  expectedSecondaryExposure: Partial<Record<LoadTargetId, number>>; evidence: ContentEvidence; claims?:ExerciseClaim[];
+  limitingFactors:string[]; sensations:ExerciseSensations;
 }
 export interface WorkoutDay { id: WorkoutDayId; title: string; description: string; primaryMuscleGroup: MuscleGroupId; secondaryMuscleGroup: MuscleGroupId }
 export type WorkoutDaySelection = Partial<Record<MuscleGroupId, Partial<Record<ExerciseStageId, string>>>>;
 export type RecommendationStatus = 'recommended' | 'suitable' | 'not_ideal';
-export interface WorkoutRecommendation { exerciseId: string; status: RecommendationStatus; reasons: string[]; score: number; confidence: EvidenceConfidence; rule: string }
+export type RecommendationReasonTone = 'positive' | 'neutral' | 'negative';
+export interface RecommendationReason { id:string; text:string; tone:RecommendationReasonTone; ruleId:string }
+export interface WorkoutRecommendation { exerciseId: string; status: RecommendationStatus; reasons: RecommendationReason[]; score: number; confidence: EvidenceConfidence; rule?: string }
 export interface SecondaryGroupContext { exposureLevel: LoadLevel; jointLoad: { lowerBack: LoadLevel; grip: LoadLevel; elbows: LoadLevel; shoulders: LoadLevel; systemic: LoadLevel }; notes: string[] }
 export interface WorkoutStep { muscleGroupId: MuscleGroupId; stageId: ExerciseStageId; order: number; optional?: boolean }
