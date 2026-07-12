@@ -1,6 +1,6 @@
 import { exercises as legacyChestExercises } from './exercises';
 import { exerciseStages } from './exerciseStages';
-import type { EquipmentType, ExerciseFocus, ExerciseStageId, LoadLevel, MovementPattern, MuscleGroupId, UniversalExerciseRole, WorkoutExercise } from '../types/workout';
+import type { EquipmentType, ExerciseFocus, ExerciseStageId, LoadLevel, LoadTargetId, MovementPattern, MuscleGroupId, UniversalExerciseRole, WorkoutExercise } from '../types/workout';
 
 const stageById = new Map(exerciseStages.map(stage => [stage.id, stage]));
 const chestStageIds: Record<number, ExerciseStageId> = {1:'chest-heavy-press',2:'chest-volume',3:'chest-isolation'};
@@ -23,10 +23,12 @@ export const chestExercises: WorkoutExercise[] = legacyChestExercises.map(exerci
   weight:exercise.weight,tip:exercise.tip,progression:exercise.progression,choose:exercise.choose,avoid:exercise.avoid,mistakes:exercise.mistakes,howto:exercise.howto,
   focus:{label:exercise.focus,metrics:[{id:'upper',label:'Верх',value:exercise.upper},{id:'middle',label:'Середина',value:exercise.middle},{id:'lower',label:'Низ',value:exercise.lower}]},
   profile:{movementPattern:exercise.profile.angle === 'incline' ? 'incline_press' : exercise.profile.movementType === 'fly' ? 'chest_fly' : 'horizontal_press',equipment:equipmentFromName(exercise.name),stabilityDemand:exercise.profile.stabilityDemand,systemicFatigue:exercise.profile.fatigueCost,jointStress:exercise.profile.fatigueCost,lengthenedBias:exercise.profile.lengthenedBias ? 5 : 2,contractionBias:exercise.profile.contractionBias ? 5 : 2,unilateral:false},
-  secondaryLoad:{triceps:exercise.profile.movementType === 'press' ? (exercise.profile.freeWeight ? 4 : 3) : exercise.name.includes('Разведения') ? 0 : 1},
+  secondaryLoad:{triceps:exercise.profile.movementType === 'press' ? (exercise.profile.freeWeight ? 4 : 3) : exercise.name.includes('Разведения') ? 0 : 1,front_delts:exercise.profile.movementType === 'press' ? (exercise.profile.angle==='incline'?4:3) : 1,elbows:exercise.profile.movementType === 'press'?2:0},
 }));
 
-interface SimpleSpec { id:string; stageId:string; name:string; pattern:MovementPattern; equipment?:EquipmentType; role?:UniversalExerciseRole; secondaryRole?:UniversalExerciseRole; focusLabel?:string; metrics?:Array<[string,string,number]>; fatigue?:LoadLevel; stability?:LoadLevel; jointStress?:LoadLevel; unilateral?:boolean; secondaryLoad?:Partial<Record<MuscleGroupId,number>> }
+interface SimpleSpec { id:string; stageId:string; name:string; pattern:MovementPattern; equipment?:EquipmentType; role?:UniversalExerciseRole; secondaryRole?:UniversalExerciseRole; focusLabel?:string; metrics?:Array<[string,string,number]>; fatigue?:LoadLevel; stability?:LoadLevel; jointStress?:LoadLevel; unilateral?:boolean; secondaryLoad?:Partial<Record<LoadTargetId,number>> }
+
+function patternLoads(pattern:MovementPattern):Partial<Record<LoadTargetId,number>> {if(pattern==='knee_dominant')return{quads:4,glutes:2,systemic:2};if(pattern==='hip_hinge')return{hamstrings:4,glutes:4,lower_back:2,systemic:3};if(pattern==='vertical_pull')return{lats:4,biceps:3,grip:2};if(pattern==='horizontal_pull')return{upper_back:4,biceps:2,rear_delts:2};if(pattern==='vertical_press')return{front_delts:4,triceps:3,systemic:2};if(pattern==='lateral_raise')return{side_delts:4};if(pattern==='rear_delt_fly')return{rear_delts:4};if(pattern==='elbow_extension_overhead'||pattern==='elbow_extension_downward')return{elbows:2};return{};}
 
 function makeExercise(muscleGroupId: MuscleGroupId, spec: SimpleSpec): WorkoutExercise {
   const stage = stageById.get(spec.stageId)!;
@@ -35,7 +37,7 @@ function makeExercise(muscleGroupId: MuscleGroupId, spec: SimpleSpec): WorkoutEx
     role:spec.role ?? 'main_volume',secondaryRole:spec.secondaryRole,roleDescription:'Помогает закрыть задачу текущего этапа без неоправданного дублирования предыдущей работы.',
     weight:`Вес подходит, если выполняется диапазон ${stage.reps} с заданным запасом и стабильной техникой.`,tip:'Сохраняй контролируемую амплитуду и не ускоряй негативную фазу.',progression:'Достиг верхней границы повторений во всех подходах — добавь минимальный доступный шаг.',
     choose:['Соответствует задаче текущего этапа.','Траектория комфортна для суставов.'],avoid:['Появляется боль или теряется контроль.'],mistakes:['Слишком большой вес.','Сокращение амплитуды.'],howto:['Настрой исходное положение.','Выполни движение подконтрольно.','Сохрани одинаковую технику во всех повторениях.'],focus,
-    profile:{movementPattern:spec.pattern,equipment:spec.equipment ?? equipmentFromName(spec.name),stabilityDemand:spec.stability ?? 'medium',systemicFatigue:spec.fatigue ?? 'medium',jointStress:spec.jointStress ?? 'medium',lengthenedBias:spec.role === 'lengthened' ? 5 : 2,contractionBias:spec.role === 'peak_contraction' ? 5 : 2,unilateral:spec.unilateral ?? false},secondaryLoad:spec.secondaryLoad ?? {}};
+    profile:{movementPattern:spec.pattern,equipment:spec.equipment ?? equipmentFromName(spec.name),stabilityDemand:spec.stability ?? 'medium',systemicFatigue:spec.fatigue ?? 'medium',jointStress:spec.jointStress ?? 'medium',lengthenedBias:spec.role === 'lengthened' ? 5 : 2,contractionBias:spec.role === 'peak_contraction' ? 5 : 2,unilateral:spec.unilateral ?? false},secondaryLoad:{...patternLoads(spec.pattern),...(spec.secondaryLoad??{})}};
 }
 
 const specs: Record<Exclude<MuscleGroupId,'chest'>, SimpleSpec[]> = {
