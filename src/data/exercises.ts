@@ -2,7 +2,8 @@ import type { Exercise } from '../types';
 
 export const exercises = [
       {
-        stage:1,name:'Жим штанги лёжа',focus:'Вся грудь',feature:'Максимум силы',difficulty:'Высокая',
+        id:'barbell-bench-press',stage:1,name:'Жим штанги лёжа',focus:'Вся грудь',feature:'Максимум силы',difficulty:'Высокая',
+        profile:{angle:'horizontal',movementType:'press',stabilityDemand:'high',fatigueCost:'high',freeWeight:true,lengthenedBias:false,contractionBias:false},
         role:'strength_base',
         roleDescription:'Позволяет системно прогрессировать в рабочем весе и использовать высокое механическое напряжение. Обычно выполняется первым упражнением.',
         upper:2,middle:5,lower:3,reps:'5–8',sets:'3–4',rir:'1–2',rest:'2–3 мин',
@@ -16,7 +17,8 @@ export const exercises = [
         howto:['Сведи и опусти лопатки, поставь стопы устойчиво.','Опускай штангу к нижней части груди, сохраняя предплечья близко к вертикали.','Выжимай вверх по стабильной траектории, не теряя положение лопаток.']
       },
       {
-        stage:1,name:'Жим гантелей лёжа',focus:'Вся грудь',feature:'Большая амплитуда',difficulty:'Средняя',
+        id:'dumbbell-bench-strength',stage:1,name:'Жим гантелей лёжа',focus:'Вся грудь',feature:'Большая амплитуда',difficulty:'Средняя',
+        profile:{angle:'horizontal',movementType:'press',stabilityDemand:'high',fatigueCost:'high',freeWeight:true,lengthenedBias:true,contractionBias:false},
         role:'strength_base',secondaryRole:'lengthened',
         roleDescription:'Сочетает тяжёлую базовую нагрузку с увеличенной амплитудой и выраженной работой грудных в растянутом положении.',
         upper:3,middle:5,lower:3,reps:'6–8',sets:'3–4',rir:'1–2',rest:'2–3 мин',
@@ -30,7 +32,8 @@ export const exercises = [
         howto:['Поставь гантели на бёдра и помоги себе выйти в стартовую позицию.','Опускай их по дуге до комфортной глубины, удерживая лопатки.','Выжимай вверх и немного внутрь, не сталкивая гантели.']
       },
       {
-        stage:1,name:'Жим в Hammer / тренажёре',focus:'Вся грудь',feature:'Минимум стабилизации',difficulty:'Низкая',
+        id:'machine-press-strength',stage:1,name:'Жим в Hammer / тренажёре',focus:'Вся грудь',feature:'Минимум стабилизации',difficulty:'Низкая',
+        profile:{angle:'horizontal',movementType:'press',stabilityDemand:'low',fatigueCost:'medium',freeWeight:false,lengthenedBias:false,contractionBias:false},
         role:'stable_overload',
         roleDescription:'Позволяет приблизиться к отказу и нагрузить грудные без высоких требований к стабилизации.',
         upper:3,middle:5,lower:3,reps:'6–8',sets:'3–4',rir:'1–2',rest:'2 мин',
@@ -44,7 +47,8 @@ export const exercises = [
         howto:['Настрой сиденье и положение рукоятей под середину груди.','Зафиксируй лопатки и начни движение без рывка.','Выжимай до почти полного разгибания, не выводя плечи вперёд.']
       },
       {
-        stage:1,name:'Наклонный жим штанги',focus:'Верх груди',feature:'Силовой акцент на верх',difficulty:'Высокая',
+        id:'incline-barbell-strength',stage:1,name:'Наклонный жим штанги',focus:'Верх груди',feature:'Силовой акцент на верх',difficulty:'Высокая',
+        profile:{angle:'incline',movementType:'press',stabilityDemand:'high',fatigueCost:'high',freeWeight:true,lengthenedBias:false,contractionBias:false},
         role:'strength_base',secondaryRole:'upper_chest_focus',
         roleDescription:'Даёт возможность прогрессировать в тяжёлом жиме с дополнительным акцентом на ключичную часть грудных.',
         upper:5,middle:3,lower:1,reps:'5–8',sets:'3–4',rir:'1–2',rest:'2–3 мин',
@@ -59,7 +63,8 @@ export const exercises = [
       },
 
       {
-        stage:2,name:'Жим гантелей под наклоном',focus:'Верх груди',feature:'Универсальный верх груди',difficulty:'Средняя',
+        id:'incline-dumbbell-volume',stage:2,name:'Жим гантелей под наклоном',focus:'Верх груди',feature:'Универсальный верх груди',difficulty:'Средняя',
+        profile:{angle:'incline',movementType:'press',stabilityDemand:'medium',fatigueCost:'medium',freeWeight:true,lengthenedBias:true,contractionBias:false},
         role:'main_volume',secondaryRole:'upper_chest_focus',
         roleDescription:'Даёт основной гипертрофийный объём для верхней части груди без необходимости работать в силовом диапазоне.',
         upper:5,middle:3,lower:1,reps:'8–12',sets:'3–4',rir:'1–2',rest:'90–120 сек',
@@ -73,7 +78,8 @@ export const exercises = [
         howto:['Выставь угол 15–30 градусов.','Опускай гантели к верхней части груди под контролем.','Выжимай вверх и немного внутрь, сохраняя лопатки.']
       },
       {
-        stage:2,name:'Жим штанги под наклоном',focus:'Верх груди',feature:'Простая прогрессия',difficulty:'Высокая',
+        id:'incline-barbell-volume',stage:2,name:'Жим штанги под наклоном',focus:'Верх груди',feature:'Простая прогрессия',difficulty:'Высокая',
+        profile:{angle:'incline',movementType:'press',stabilityDemand:'high',fatigueCost:'high',freeWeight:true,lengthenedBias:false,contractionBias:false},
         role:'main_volume',secondaryRole:'upper_chest_focus',
         roleDescription:'Обеспечивает предсказуемую прогрессию объёма и дополнительно нагружает верхнюю часть груди.',
         upper:5,middle:3,lower:1,reps:'8–10',sets:'3–4',rir:'1–2',rest:'90–120 сек',
@@ -87,7 +93,8 @@ export const exercises = [
         howto:['Зафиксируй лопатки и стопы.','Опускай штангу к верхней части груди.','Выжимай без потери положения плеч.']
       },
       {
-        stage:2,name:'Наклонный Hammer / Смит',focus:'Верх груди',feature:'Стабильная траектория',difficulty:'Низкая',
+        id:'incline-machine-volume',stage:2,name:'Наклонный Hammer / Смит',focus:'Верх груди',feature:'Стабильная траектория',difficulty:'Низкая',
+        profile:{angle:'incline',movementType:'press',stabilityDemand:'low',fatigueCost:'low',freeWeight:false,lengthenedBias:false,contractionBias:false},
         role:'stable_overload',secondaryRole:'upper_chest_focus',
         roleDescription:'Создаёт стабильную перегрузку верхней части груди и позволяет работать близко к отказу без лишней стабилизации.',
         upper:5,middle:3,lower:1,reps:'8–12',sets:'3–4',rir:'1–2',rest:'90 сек',
@@ -101,7 +108,8 @@ export const exercises = [
         howto:['Настрой сиденье и угол под верх груди.','Опускай вес контролируемо до комфортной глубины.','Выжимай без отрыва спины и без рывка.']
       },
       {
-        stage:2,name:'Жим гантелей лёжа',focus:'Средняя часть',feature:'Объём в полной амплитуде',difficulty:'Средняя',
+        id:'dumbbell-bench-volume',stage:2,name:'Жим гантелей лёжа',focus:'Средняя часть',feature:'Объём в полной амплитуде',difficulty:'Средняя',
+        profile:{angle:'horizontal',movementType:'press',stabilityDemand:'medium',fatigueCost:'medium',freeWeight:true,lengthenedBias:true,contractionBias:false},
         role:'main_volume',
         roleDescription:'Добавляет основной гипертрофийный объём для средней части груди в полной контролируемой амплитуде.',
         upper:3,middle:5,lower:3,reps:'8–12',sets:'3–4',rir:'1–2',rest:'90–120 сек',
@@ -116,7 +124,8 @@ export const exercises = [
       },
 
       {
-        stage:3,name:'Кроссовер сверху вниз',focus:'Нижняя часть',feature:'Постоянное натяжение',difficulty:'Низкая',
+        id:'high-to-low-cable-fly',stage:3,name:'Кроссовер сверху вниз',focus:'Нижняя часть',feature:'Постоянное натяжение',difficulty:'Низкая',
+        profile:{angle:'decline',movementType:'fly',stabilityDemand:'low',fatigueCost:'low',freeWeight:false,lengthenedBias:false,contractionBias:true},
         role:'lower_chest_focus',secondaryRole:'peak_contraction',
         roleDescription:'Смещает акцент ниже линии плеч и позволяет работать с постоянным натяжением.',
         upper:2,middle:4,lower:5,reps:'12–15',sets:'3–4',rir:'0–1',rest:'60–90 сек',
@@ -130,7 +139,8 @@ export const exercises = [
         howto:['Сделай небольшой шаг вперёд и зафиксируй корпус.','Веди руки по дуге вниз и внутрь.','Сведи грудь и плавно вернись, не теряя натяжения.']
       },
       {
-        stage:3,name:'Кроссовер снизу вверх',focus:'Верх груди',feature:'Изоляция верха',difficulty:'Средняя',
+        id:'low-to-high-cable-fly',stage:3,name:'Кроссовер снизу вверх',focus:'Верх груди',feature:'Изоляция верха',difficulty:'Средняя',
+        profile:{angle:'incline',movementType:'fly',stabilityDemand:'low',fatigueCost:'low',freeWeight:false,lengthenedBias:false,contractionBias:true},
         role:'upper_chest_focus',secondaryRole:'peak_contraction',
         roleDescription:'Добавляет объём верхней части груди без второго тяжёлого жимового упражнения.',
         upper:5,middle:3,lower:1,reps:'12–15',sets:'3–4',rir:'0–1',rest:'60–90 сек',
@@ -144,7 +154,8 @@ export const exercises = [
         howto:['Возьми нижние блоки и слегка наклонись вперёд.','Веди руки вверх и внутрь по дуге.','Остановись до момента, когда движение начинает забирать дельта.']
       },
       {
-        stage:3,name:'Пек-дек',focus:'Средняя часть',feature:'Пиковое сокращение',difficulty:'Низкая',
+        id:'pec-deck',stage:3,name:'Пек-дек',focus:'Средняя часть',feature:'Пиковое сокращение',difficulty:'Низкая',
+        profile:{angle:'horizontal',movementType:'fly',stabilityDemand:'low',fatigueCost:'low',freeWeight:false,lengthenedBias:false,contractionBias:true},
         role:'peak_contraction',
         roleDescription:'Позволяет стабильно сводить руки и удерживать сокращение грудных в конечной части движения.',
         upper:3,middle:5,lower:2,reps:'12–15',sets:'3–4',rir:'0–1',rest:'60–90 сек',
@@ -158,7 +169,8 @@ export const exercises = [
         howto:['Настрой сиденье так, чтобы локти были примерно на уровне середины груди.','Сведи руки перед собой без движения плеч вперёд.','Медленно вернись в исходное положение.']
       },
       {
-        stage:3,name:'Разведения гантелей',focus:'Средняя часть',feature:'Нагрузка в растяжении',difficulty:'Средняя',
+        id:'dumbbell-fly',stage:3,name:'Разведения гантелей',focus:'Средняя часть',feature:'Нагрузка в растяжении',difficulty:'Средняя',
+        profile:{angle:'horizontal',movementType:'fly',stabilityDemand:'medium',fatigueCost:'medium',freeWeight:true,lengthenedBias:true,contractionBias:false},
         role:'lengthened',
         roleDescription:'Создаёт выраженную нагрузку на грудные в удлинённом положении. Требует умеренного веса и контроля нижней точки.',
         upper:3,middle:4,lower:2,reps:'10–15',sets:'3–4',rir:'0–1',rest:'60–90 сек',

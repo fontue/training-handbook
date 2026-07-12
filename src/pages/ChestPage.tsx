@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { exerciseRoles } from '../config/exerciseRoles';
+import { CurrentWorkout } from '../components/CurrentWorkout';
+import { ExerciseModal } from '../components/ExerciseModal';
+import { ExerciseSection } from '../components/ExerciseSection';
 import { exercises } from '../data/exercises';
-import type { Exercise, ExerciseRole, Stage } from '../types';
-
-const stageLabels: Record<Stage, string> = {
-  1: 'Силовое',
-  2: 'Объём',
-  3: 'Изоляция',
-};
+import { getStageThreeRecommendations, getStageTwoRecommendations, sortByRecommendation } from '../recommendations/chestRecommendations';
+import type { Exercise, Stage, WorkoutSelection } from '../types';
 
 function StageCards() {
   const stages = [
@@ -29,49 +26,6 @@ function StageCards() {
       </div>
       <div className="stage-note">{stage.note}</div>
     </article>)}
-  </div>;
-}
-
-function FocusBars({ exercise }: { exercise: Exercise }) {
-  const rows = [['Верх', exercise.upper], ['Серед.', exercise.middle], ['Низ', exercise.lower]] as const;
-  return <div className="focus-cell">
-    <div className="focus-title">{exercise.focus}</div>
-    <div className="focus-bars">{rows.map(([label, value]) =>
-      <div className="focus-row" key={label}>
-        <span>{label}</span><span className="focus-track"><span className="focus-fill" style={{ width: `${value * 20}%` }} /></span><span className="focus-score">{value}/5</span>
-      </div>)}</div>
-  </div>;
-}
-
-function ExerciseTable({ items, onOpen }: { items: Exercise[]; onOpen: (exercise: Exercise) => void }) {
-  return <div className="panel table-wrap"><table>
-    <thead><tr><th>Этап</th><th>Упражнение</th><th>Акцент</th><th>Повторы</th></tr></thead>
-    <tbody>{items.map((exercise, index) => <tr key={`${exercise.stage}-${exercise.name}-${index}`} onClick={() => onOpen(exercise)}>
-      <td><span className={`stage-tag table-stage-tag s${exercise.stage}`}><span>{exercise.stage}</span><span className="table-stage-label">. {stageLabels[exercise.stage]}</span></span></td>
-      <td><div className="mobile-exercise-stage"><span className={`stage-tag s${exercise.stage}`}>{exercise.stage}. {stageLabels[exercise.stage]}</span></div><div className="exercise-name">{exercise.name}</div></td>
-      <td><FocusBars exercise={exercise} /></td>
-      <td><strong>{exercise.reps}</strong></td>
-    </tr>)}</tbody>
-  </table></div>;
-}
-
-function InfoCard({ title, children, className = '' }: { title: string; children: React.ReactNode; className?: string }) {
-  return <section className={`info-card ${className}`.trim()}><h3>{title}</h3>{children}</section>;
-}
-
-function RoleBadge({ role, secondary = false }: { role: ExerciseRole; secondary?: boolean }) {
-  const config = exerciseRoles[role];
-  return <span className={`role-badge ${config.className}${secondary ? ' secondary' : ''}`}>{config.label}</span>;
-}
-
-function ModalCharacteristics({ exercise, className }: { exercise: Exercise; className: string }) {
-  return <div className={`modal-characteristics ${className}`}>
-    {[['Повторения', exercise.reps], ['Подходы', exercise.sets], ['RIR', exercise.rir], ['Отдых', exercise.rest], ['Сложность', exercise.difficulty], ['Особенность', exercise.feature]].map(([label, value]) =>
-      <div className="modal-characteristic" key={label}><span>{label}</span><strong>{value}</strong></div>)}
-    <div className="modal-characteristic role-characteristic">
-      <span>Роль</span>
-      <div className="role-badges"><RoleBadge role={exercise.role} />{exercise.secondaryRole && <RoleBadge role={exercise.secondaryRole} secondary />}</div>
-    </div>
   </div>;
 }
 
@@ -103,52 +57,13 @@ function ReferenceModal({ type, onClose }: { type: ReferenceModalType | null; on
   </div>;
 }
 
-function ExerciseModal({ exercise, onClose }: { exercise: Exercise | null; onClose: () => void }) {
-  useEffect(() => {
-    if (!exercise) return;
-    document.body.classList.add('modal-open');
-    const closeOnEscape = (event: KeyboardEvent) => event.key === 'Escape' && onClose();
-    document.addEventListener('keydown', closeOnEscape);
-    return () => { document.body.classList.remove('modal-open'); document.removeEventListener('keydown', closeOnEscape); };
-  }, [exercise, onClose]);
-
-  if (!exercise) return null;
-  const scores = [['Верх', exercise.upper], ['Серед.', exercise.middle], ['Низ', exercise.lower]] as const;
-  return <div className="modal-backdrop open" aria-hidden="false" onMouseDown={event => event.target === event.currentTarget && onClose()}>
-    <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button className="modal-close" type="button" aria-label="Закрыть" onClick={onClose}>✕</button>
-      <div className="modal-top">
-        <div className="modal-summary">
-          <div className="modal-kicker"><span className={`stage-tag s${exercise.stage}`}>{exercise.stage}. {stageLabels[exercise.stage]}</span><span className="page-chip">{exercise.focus}</span></div>
-          <h2 className="modal-title" id="modalTitle">{exercise.name}</h2><p className="modal-description">{exercise.description}</p>
-          <ModalCharacteristics exercise={exercise} className="desktop-characteristics" />
-        </div>
-        <div className="modal-visual"><div className="exercise-figure" /><div className="visual-caption">Место для фото или короткой анимации техники упражнения</div></div>
-      </div>
-      <ModalCharacteristics exercise={exercise} className="mobile-characteristics" />
-      <div className="modal-body">
-        <div className="modal-focus"><div><strong>{exercise.focus}</strong><span className="muted">Распределение акцента</span></div>
-          <div className="focus-bars">{scores.map(([label, value]) => <div className="focus-row" key={label}><span>{label}</span><span className="focus-track"><span className="focus-fill" style={{ width: `${value * 20}%` }} /></span><span className="focus-score">{value}/5</span></div>)}</div>
-        </div>
-        <div className="modal-grid">
-          <InfoCard title="Зачем это упражнение в программе" className="role-description"><p>{exercise.roleDescription}</p></InfoCard>
-          <InfoCard title="Как выполнять" className="howto"><ol>{exercise.howto.map(item => <li key={item}>{item}</li>)}</ol></InfoCard>
-          <InfoCard title="Подсказка тренера"><p>{exercise.tip}</p></InfoCard>
-          <InfoCard title="Прогрессия"><p>{exercise.progression}</p></InfoCard>
-          <InfoCard title="Когда выбирать"><ul>{exercise.choose.map(item => <li key={item}>{item}</li>)}</ul></InfoCard>
-          <InfoCard title="Когда не выбирать"><ul>{exercise.avoid.map(item => <li key={item}>{item}</li>)}</ul></InfoCard>
-          <InfoCard title="Частые ошибки"><ul>{exercise.mistakes.map(item => <li key={item}>{item}</li>)}</ul></InfoCard>
-          <InfoCard title="Как понять, что вес подходит"><p>{exercise.weight}</p></InfoCard>
-        </div>
-      </div>
-    </div>
-  </div>;
-}
-
 export function ChestPage() {
   const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
   const [referenceModal, setReferenceModal] = useState<ReferenceModalType | null>(null);
   const [isHeaderCompact, setIsHeaderCompact] = useState(false);
+  const [selection, setSelection] = useState<WorkoutSelection>({});
+  const [query, setQuery] = useState('');
+  const [focusFilter, setFocusFilter] = useState('');
 
   useEffect(() => {
     const updateHeader = () => setIsHeaderCompact(window.scrollY > 16);
@@ -157,9 +72,25 @@ export function ChestPage() {
     return () => window.removeEventListener('scroll', updateHeader);
   }, []);
 
+  const byStage = useMemo(() => ({
+    1: exercises.filter(exercise => exercise.stage === 1),
+    2: exercises.filter(exercise => exercise.stage === 2),
+    3: exercises.filter(exercise => exercise.stage === 3),
+  }), []);
+  const stageTwoRecommendations = useMemo(() => selection[1] ? getStageTwoRecommendations(selection[1], byStage[2]) : [], [selection, byStage]);
+  const stageThreeRecommendations = useMemo(() => selection[1] && selection[2] ? getStageThreeRecommendations(selection[1], selection[2], byStage[3]) : [], [selection, byStage]);
+  const visibleByStage = useMemo(() => {
+    const filter = (items: Exercise[]) => items.filter(exercise => (!query.trim() || exercise.name.toLowerCase().includes(query.trim().toLowerCase())) && (!focusFilter || exercise.focus === focusFilter));
+    return { 1: filter(byStage[1]), 2: sortByRecommendation(filter(byStage[2]), stageTwoRecommendations), 3: sortByRecommendation(filter(byStage[3]), stageThreeRecommendations) };
+  }, [byStage, focusFilter, query, stageThreeRecommendations, stageTwoRecommendations]);
+
+  const selectExercise = (exercise: Exercise) => {
+    setSelection(previous => exercise.stage === 1 ? { 1: exercise } : exercise.stage === 2 ? { 1: previous[1], 2: exercise } : { ...previous, 3: exercise });
+  };
+
   return <>
     <nav className={`topbar${isHeaderCompact ? ' compact' : ''}`}><div className="topbar-inner"><Link className="brand" to="/"><div className="brand-mark">TH</div><span>Training Handbook</span></Link></div></nav>
-    <main className="shell">
+    <main className="shell chest-shell">
       <div className={`breadcrumbs-row${isHeaderCompact ? ' compact' : ''}`}>
         <Link className="back-link" to="/" aria-label="Назад на главную">←</Link>
         <nav className="breadcrumbs" aria-label="Хлебные крошки"><Link to="/">Главная</Link><span aria-hidden="true">/</span><span aria-current="page">Грудь</span></nav>
@@ -167,11 +98,12 @@ export function ChestPage() {
       <header className="page-head"><div><h1>Грудь</h1><p>Упражнения для развития груди: силовые жимы, основной объём и изоляция с акцентом на верхнюю, среднюю и нижнюю части.</p></div><div className="page-chip"><span className="dot" /> 12 упражнений</div></header>
       <div className="reference-actions"><button className="reference-button" type="button" onClick={() => setReferenceModal('stages')}><strong>Этапы тренировки</strong><span>Порядок упражнений и диапазоны</span></button><button className="reference-button" type="button" onClick={() => setReferenceModal('progression')}><strong>Прогрессия и рабочий вес</strong><span>Правила выбора и повышения веса</span></button></div>
       <section className="section" id="exercises">
-        <div className="section-title exercise-section-title"><h2>Упражнения</h2><p>Нажми на строку, чтобы открыть карточку упражнения.</p></div>
-        <ExerciseTable items={exercises} onOpen={setCurrentExercise} />
+        <div className="section-title exercise-section-title"><h2>Упражнения</h2><p>Нажми на карточку, чтобы открыть подробную информацию.</p></div>
+        <div className="exercise-filters"><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Поиск упражнения…" /><select value={focusFilter} onChange={event => setFocusFilter(event.target.value)}><option value="">Любой акцент</option><option value="Вся грудь">Вся грудь</option><option value="Верх груди">Верх груди</option><option value="Средняя часть">Средняя часть</option><option value="Нижняя часть">Нижняя часть</option></select></div>
+        <div className="exercise-catalog-layout"><div className="exercise-sections">{([1, 2, 3] as Stage[]).map(stage => visibleByStage[stage].length > 0 && <ExerciseSection key={stage} stage={stage} exercises={visibleByStage[stage]} recommendations={stage === 2 ? stageTwoRecommendations : stage === 3 ? stageThreeRecommendations : []} selectedId={selection[stage]?.id} onOpen={setCurrentExercise} onSelect={selectExercise} />)}</div><CurrentWorkout selection={selection} onClear={() => setSelection({})} /></div>
       </section>
     </main>
     <ReferenceModal type={referenceModal} onClose={() => setReferenceModal(null)} />
-    <ExerciseModal exercise={currentExercise} onClose={() => setCurrentExercise(null)} />
+    <ExerciseModal exercise={currentExercise} selected={Boolean(currentExercise && selection[currentExercise.stage]?.id === currentExercise.id)} onClose={() => setCurrentExercise(null)} onSelect={selectExercise} />
   </>;
 }
