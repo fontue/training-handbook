@@ -32,7 +32,7 @@ export const exercises = [
         howto:['Поставь гантели на бёдра и помоги себе выйти в стартовую позицию.','Опускай их по дуге до комфортной глубины, удерживая лопатки.','Выжимай вверх и немного внутрь, не сталкивая гантели.']
       },
       {
-        id:'machine-press-strength',stage:1,name:'Жим в Hammer / тренажёре',focus:'Вся грудь',feature:'Минимум стабилизации',difficulty:'Низкая',
+        id:'machine-press-strength',stage:1,name:'Горизонтальный жим в тренажёре',focus:'Вся грудь',feature:'Минимум стабилизации',difficulty:'Низкая',
         profile:{angle:'horizontal',movementType:'press',stabilityDemand:'low',fatigueCost:'medium',freeWeight:false,lengthenedBias:false,contractionBias:false},
         role:'stable_overload',
         roleDescription:'Позволяет приблизиться к отказу и нагрузить грудные без высоких требований к стабилизации.',
@@ -93,7 +93,7 @@ export const exercises = [
         howto:['Зафиксируй лопатки и стопы.','Опускай штангу к верхней части груди.','Выжимай без потери положения плеч.']
       },
       {
-        id:'incline-machine-volume',stage:2,name:'Наклонный Hammer / Смит',focus:'Верх груди',feature:'Стабильная траектория',difficulty:'Низкая',
+        id:'incline-machine-volume',stage:2,name:'Наклонный жим в тренажёре',focus:'Верх груди',feature:'Стабильная траектория',difficulty:'Низкая',
         profile:{angle:'incline',movementType:'press',stabilityDemand:'low',fatigueCost:'low',freeWeight:false,lengthenedBias:false,contractionBias:false},
         role:'stable_overload',secondaryRole:'upper_chest_focus',
         roleDescription:'Создаёт стабильную перегрузку верхней части груди и позволяет работать близко к отказу без лишней стабилизации.',

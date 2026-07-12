@@ -257,6 +257,9 @@
     .recommendation-reason li.positive::before { content:'+'; color:var(--green); }
     .recommendation-reason li.negative { color:#ffc0ba; background:rgba(255,123,114,.08); }
     .recommendation-reason li.negative::before { content:'−'; color:var(--danger); }
+    .recommendation-reason details { margin-top:8px; color:var(--muted); font-size:10px; }
+    .recommendation-reason summary { width:max-content; cursor:pointer; color:#8ed6f7; font-weight:750; }
+    .recommendation-reason details p { margin:6px 0 0; }
 
     .workout-impact { margin:18px 0 24px; }
     .workout-impact h2 { margin:0 0 10px; font-size:18px; }
@@ -323,10 +326,14 @@
     .muscle-involvement-copy h3 { margin:0 0 7px; font-size:14px; }
     .muscle-involvement-copy > p { margin:0 0 11px; color:var(--muted); font-size:12px; }
     .muscle-involvement-copy > p strong { color:var(--text); }
+    .participation-row { display:grid; gap:2px; margin-bottom:7px; padding:7px 9px; border:1px solid var(--line); border-radius:9px; background:rgba(255,255,255,.025); }
+    .participation-row span { color:var(--muted); font-size:10px; }
+    .participation-row strong { color:#dbe5ef; font-size:11px; line-height:1.35; }
     .muscle-involvement-copy .focus-bars { grid-template-columns:max-content minmax(0,1fr) 28px; column-gap:8px; }
     .muscle-involvement-copy .focus-row { display:contents; }
     .muscle-involvement-copy .focus-row > span { align-self:center; }
     .muscle-involvement-copy .focus-row > span:first-child { white-space:nowrap; }
+    .focus-disclaimer { display:block; margin-top:10px; color:var(--muted); font-size:10px; line-height:1.45; }
     .muscle-involvement-copy ul { display:grid; gap:6px; margin:0; padding:0; list-style:none; }
     .muscle-involvement-copy li { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 9px; border:1px solid var(--line); border-radius:9px; background:rgba(255,255,255,.025); font-size:11px; }
     .muscle-involvement-copy li span { color:#c7cfda; }
