@@ -1,8 +1,21 @@
-const CACHE_NAME = 'training-handbook-v1';
-const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon.svg'];
+const CACHE_NAME = 'training-handbook-v2';
+const STATIC_FILES = ['./manifest.webmanifest', './icons/icon.svg'];
+
+async function cacheAppShell() {
+  const cache = await caches.open(CACHE_NAME);
+  const response = await fetch('./', { cache: 'reload' });
+  const html = await response.text();
+  const assetPaths = [...html.matchAll(/(?:src|href)="([^"]+)"/g)]
+    .map(match => new URL(match[1], self.registration.scope).href)
+    .filter(url => url.startsWith(self.registration.scope));
+
+  await cache.put('./', new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } }));
+  await cache.put('./index.html', new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } }));
+  await cache.addAll([...STATIC_FILES, ...new Set(assetPaths)]);
+}
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+  event.waitUntil(cacheAppShell().then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
