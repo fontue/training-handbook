@@ -1,0 +1,15 @@
+{
+  "name": "Training Handbook",
+  "short_name": "Handbook",
+  "description": "Конструктор тренировок с подбором упражнений и рекомендациями.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101820",
+  "theme_color": "#4DA8DA",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
