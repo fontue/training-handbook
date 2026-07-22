@@ -220,6 +220,8 @@
     .step-mini-card:hover { border-color:var(--step-color); background:rgba(var(--step-rgb),.09); }
     .step-mini-card:hover .step-number { color:var(--step-color); background:rgba(var(--step-rgb),.14); }
     .step-mini-card.complete .step-number { color:#082118; background:var(--green); }
+    .step-mini-card.skipped { border-color:var(--step-color); background:rgba(var(--step-rgb),.055); }
+    .step-mini-card.skipped .step-number { color:var(--muted); background:rgba(255,255,255,.075); }
     .step-mini-card.optional { border-style:dashed; }
     .step-number { width:28px; height:28px; display:grid; place-items:center; border-radius:8px; background:rgba(255,255,255,.06); font-size:11px; font-weight:900; }
     .step-mini-copy { width:100%; min-width:0; display:grid; grid-template-columns:1fr; align-items:center; gap:3px; }
@@ -239,7 +241,9 @@
     .workout-step-header > span { color:#bae6fd; font-size:12px; font-weight:800; }
     .workout-step-header h1 { margin:5px 0; font-size:clamp(25px,4vw,36px); letter-spacing:-.04em; }
     .workout-step-header p { margin:0; color:var(--muted); }
-    .step-actions { display:flex; justify-content:space-between; gap:10px; margin-top:16px; }
+    .optional-step-action { display:flex; justify-content:center; margin-top:16px; }
+    .skip-stage-button { color:var(--muted); border-color:var(--line); background:transparent; }
+    .skip-stage-button:hover { color:var(--text); border-color:var(--line-strong); background:rgba(255,255,255,.035); }
 
     .compact-exercise-card { gap:10px; }
     .compact-characteristics { display:flex; flex-wrap:wrap; gap:5px; color:#c7cfda; font-size:11px; }
